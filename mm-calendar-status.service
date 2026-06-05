@@ -1,0 +1,11 @@
+[Unit]
+Description=Mattermost status sync from Google Calendar
+# Wait for the session bus so EDS (Evolution Data Server) is reachable.
+After=basic.target
+
+[Service]
+Type=oneshot
+# Use the system python explicitly: the GObject (gi) bindings are installed
+# against /usr/bin/python3, not against pyenv/conda interpreters that may come
+# first on PATH. The installer rewrites this line to the detected interpreter.
+ExecStart=/usr/bin/python3 %h/.local/bin/mm_status.py

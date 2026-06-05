@@ -1,0 +1,66 @@
+# mm-calendar-status configuration
+#
+# Copy this file to ~/.config/mm-calendar-status/config.ini and edit the values.
+# The Mattermost token is NOT stored here; it lives in a separate file
+# (see [mattermost] token_file) so this file can be committed/shared safely.
+
+[calendar]
+# EDS source UID of the calendar to read. Find it with the gdbus command in the
+# README (Step 2). It is the source whose DisplayName equals your email address.
+uid = REPLACE_WITH_EDS_CALENDAR_UID
+
+# Your calendar account email. Used to find YOUR PARTSTAT among the attendees
+# so declined events can be skipped.
+email = you@example.com
+
+# IANA timezone name used to interpret "today" and as a fallback for events
+# that carry no TZID. Examples: America/Mexico_City, Europe/Paris, UTC.
+timezone = UTC
+
+# First EDS connect after login can be slow while the backend warms up.
+eds_connect_timeout = 60
+
+# Treat an event as active this many minutes before it actually starts, so the
+# status flips just ahead of back-to-back meetings on the :00/:15/:30/:45 marks.
+lookahead_minutes = 2
+
+[mattermost]
+# Base URL of your Mattermost server, no trailing /api/v4.
+server = https://chat.example.com
+
+# Your Mattermost user id. Obtain it from GET /users/me (see README Step 3);
+# it is the "id" field, NOT your username.
+user_id = REPLACE_WITH_MM_USER_ID
+
+# Path to a file containing ONLY the Personal Access Token (no quotes, no
+# newline). Keep it chmod 600 and outside version control.
+token_file = ~/.config/mm-calendar-status/mm_token
+
+# Per-request HTTP timeout in seconds.
+http_timeout = 10
+
+[behavior]
+# While this file exists the script does nothing, leaving your status untouched.
+pause_file = /tmp/mm_status_pause
+
+# Append-only run log.
+log_file = ~/.config/mm-calendar-status/mm_status.log
+
+[keywords]
+# Comma-separated, case-insensitive substrings matched against the event title.
+# An event whose title contains any OOO keyword is classified as out-of-office.
+ooo = out of office,ooo,ask before booking,exercise,break,lunch
+
+# Likewise for focus time. Checked only if no OOO keyword matched.
+focus = focus
+
+[status]
+# Emoji names are Mattermost emoji shortcodes WITHOUT the surrounding colons.
+# Custom server emoji (e.g. meet, shufflepartyparrot) must already exist on your
+# Mattermost instance.
+ooo_emoji = shufflepartyparrot
+ooo_text = Out of office
+focus_emoji = dart
+focus_text = Focus time
+# Meetings use the event title as the status text, so only the emoji is set.
+meeting_emoji = meet
