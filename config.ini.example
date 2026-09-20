@@ -49,7 +49,7 @@ log_file = ~/.config/mm-calendar-status/mm_status.log
 [keywords]
 # Comma-separated, case-insensitive substrings matched against the event title.
 # An event whose title contains any OOO keyword is classified as out-of-office.
-ooo = out of office,ooo,ask before booking,exercise,break,lunch
+ooo = out of office,ooo,pto,ask before booking,exercise,break,lunch
 
 # Likewise for focus time. Checked only if no OOO keyword matched.
 focus = focus

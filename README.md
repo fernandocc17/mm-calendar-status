@@ -29,9 +29,9 @@ just reads it.
 | Title matches a focus keyword                  | `:dart:`             | Focus time    |
 | Anything else (a real meeting)                 | `:meet:`             | Event title   |
 
-Default OOO keywords: `out of office`, `ooo`, `ask before booking`, `exercise`,
-`break`, `lunch`. Default focus keyword: `focus`. All are configurable and
-matched case-insensitively as substrings of the event title.
+Default OOO keywords: `out of office`, `ooo`, `pto`, `ask before booking`,
+`exercise`, `break`, `lunch`. Default focus keyword: `focus`. All are
+configurable and matched case-insensitively as substrings of the event title.
 
 Events you have **declined** (your `PARTSTAT` is `DECLINED`) are ignored.
 

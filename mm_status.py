@@ -92,7 +92,7 @@ class Config:
             parser.get(
                 "keywords",
                 "ooo",
-                fallback="out of office,ooo,ask before booking,exercise,break,lunch",
+                fallback="out of office,ooo,pto,ask before booking,exercise,break,lunch",
             )
         )
         self.focus_keywords = self._csv(
@@ -262,8 +262,8 @@ class Calendar:
                     continue
 
                 # touches today (covers all-day and multi-day)
-                if (start.astimezone(self.cfg.tz).date() != today
-                        and end.astimezone(self.cfg.tz).date() != today):
+                if not (start.astimezone(self.cfg.tz).date() <= today
+                        <= end.astimezone(self.cfg.tz).date()):
                     continue
 
                 raw = comp.get_as_string()
