@@ -59,7 +59,10 @@ focus = focus
 # Custom server emoji (e.g. meet, shufflepartyparrot) must already exist on your
 # Mattermost instance.
 ooo_emoji = shufflepartyparrot
-ooo_text = Out of office
+# {back} expands to when you are back, derived from the event's end time:
+# "back Mon 28 Sep" for whole-day events, "back at 13:00" for shorter ones.
+# Drop the placeholder for a fixed message.
+ooo_text = Out of office, {back}
 focus_emoji = dart
 focus_text = Focus time
 # Meetings use the event title as the status text, so only the emoji is set.

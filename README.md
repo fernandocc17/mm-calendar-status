@@ -25,13 +25,18 @@ just reads it.
 
 | Event                                          | Emoji                | Status text   |
 | ---------------------------------------------- | -------------------- | ------------- |
-| Title matches an OOO keyword                   | `:shufflepartyparrot:` | Out of office |
+| Title matches an OOO keyword                   | `:shufflepartyparrot:` | Out of office, back … |
 | Title matches a focus keyword                  | `:dart:`             | Focus time    |
 | Anything else (a real meeting)                 | `:meet:`             | Event title   |
 
 Default OOO keywords: `out of office`, `ooo`, `pto`, `ask before booking`,
 `exercise`, `break`, `lunch`. Default focus keyword: `focus`. All are
 configurable and matched case-insensitively as substrings of the event title.
+
+The out-of-office text ends with when you are back, worked out from the event's
+end time: `Out of office, back Mon 28 Sep` for whole-day events, `Out of office,
+back at 13:00` for a lunch or a break. It comes from the `{back}` placeholder in
+`ooo_text`; remove the placeholder if you want a fixed message.
 
 Events you have **declined** (your `PARTSTAT` is `DECLINED`) are ignored.
 

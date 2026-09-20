@@ -101,7 +101,9 @@ class Config:
 
         # [status]
         self.ooo_emoji = parser.get("status", "ooo_emoji", fallback="shufflepartyparrot")
-        self.ooo_text = parser.get("status", "ooo_text", fallback="Out of office")
+        self.ooo_text = parser.get(
+            "status", "ooo_text", fallback="Out of office, {back}"
+        )
         self.focus_emoji = parser.get("status", "focus_emoji", fallback="dart")
         self.focus_text = parser.get("status", "focus_text", fallback="Focus time")
         self.meeting_emoji = parser.get("status", "meeting_emoji", fallback="meet")
@@ -191,6 +193,24 @@ class Calendar:
                 return "focus"
         return "meeting"
 
+    def back_label(self, end: datetime, now: datetime) -> str:
+        """
+        Human-readable "when I am back" for an OOO event ending at `end`.
+
+        Whole-day events read as a day: one ending at midnight is over on that
+        date, one ending a minute short of midnight runs to the end of its last
+        day, so the day back is the one after. Shorter events read as a time.
+        """
+        end_local = end.astimezone(self.cfg.tz)
+
+        if end_local.hour == 0 and end_local.minute == 0:
+            return f"back {end_local:%a %-d %b}"
+        if (end_local.hour, end_local.minute) >= (23, 59):
+            return f"back {end_local + timedelta(days=1):%a %-d %b}"
+        if end_local.date() == now.astimezone(self.cfg.tz).date():
+            return f"back at {end_local:%H:%M}"
+        return f"back {end_local:%a %-d %b} at {end_local:%H:%M}"
+
     def _my_partstat(self, raw: str) -> str:
         """
         Parse raw VEVENT and return PARTSTAT for the configured email.
@@ -276,6 +296,7 @@ class Calendar:
                 candidates.append({
                     "title": title,
                     "end_ms": int(end.timestamp() * 1000),
+                    "back": self.back_label(end, now),
                     "type": self.classify(title),
                     "has_meet": "X-GOOGLE-CONFERENCE" in raw,
                 })
@@ -330,7 +351,11 @@ def main() -> None:
             return
 
         if event["type"] == "ooo":
-            mm.set_status(cfg.ooo_emoji, cfg.ooo_text, event["end_ms"])
+            mm.set_status(
+                cfg.ooo_emoji,
+                cfg.ooo_text.replace("{back}", event["back"]),
+                event["end_ms"],
+            )
         elif event["type"] == "focus":
             mm.set_status(cfg.focus_emoji, cfg.focus_text, event["end_ms"])
         else:
